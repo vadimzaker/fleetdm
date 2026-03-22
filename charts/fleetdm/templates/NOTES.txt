@@ -1,0 +1,36 @@
+FleetDM {{ .Chart.AppVersion }} has been deployed!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Release  : {{ .Release.Name }}
+  Namespace: {{ .Release.Namespace }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Wait for all pods to be ready:
+   kubectl get pods -n {{ .Release.Namespace }} -w
+
+2. Access the FleetDM UI:
+
+   Via Ingress (add to /etc/hosts: 127.0.0.1 {{ .Values.fleet.ingress.host }}):
+     http://{{ .Values.fleet.ingress.host }}
+     https://{{ .Values.fleet.ingress.host }}
+
+   Direct NodePort (same URL for fleetd agents):
+     http://localhost:8080
+
+   Via port-forward:
+     kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "fleetdm.fullname" . }} 8080:8080
+
+3. Fleet server URL for agents (fleetctl / fleetd --url):
+     http://localhost:8080
+
+4. Verify database migration ran successfully:
+   kubectl get jobs -n {{ .Release.Namespace }}
+
+5. Verify health:
+   kubectl exec -n {{ .Release.Namespace }} \
+     deploy/{{ include "fleetdm.fullname" . }} -- \
+     wget -qO- http://localhost:8080/healthz
+
+⚠  IMPORTANT: Change fleet.secrets.jwtKey before going to production!

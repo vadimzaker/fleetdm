@@ -1,0 +1,43 @@
+{{- if .Values.fleet.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "fleetdm.fullname" . }}
+  labels:
+    {{- include "fleetdm.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: {{ if .Values.tls.enabled }}"true"{{ else }}"false"{{ end }}
+    {{- if .Values.tls.enabled }}
+    cert-manager.io/issuer: "fleet-ca-issuer"
+    {{- end }}
+spec:
+  {{- if .Values.fleet.ingress.className }}
+  ingressClassName: {{ .Values.fleet.ingress.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.fleet.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "fleetdm.fullname" . }}
+                port:
+                  number: {{ .Values.fleet.service.port }}
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "fleetdm.fullname" . }}
+                port:
+                  number: {{ .Values.fleet.service.port }}
+  {{- if .Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.fleet.ingress.host }}
+      secretName: {{ .Values.tls.secretName }}
+  {{- end }}
+{{- end }}
