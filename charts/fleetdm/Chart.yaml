@@ -2,7 +2,7 @@ apiVersion: v2
 name: fleetdm
 description: FleetDM open-source device management platform with MySQL and Redis
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "4.62.0"
 
 keywords:
