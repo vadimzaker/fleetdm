@@ -189,7 +189,7 @@ On every `git tag v*` push, GitHub Actions will:
 
 Add as Helm repo:
 ```bash
-helm repo add fleetdm https://<your-github-user>.github.io/<repo-name>
+helm repo add fleetdm https://vadimzaker.github.io/fleetdm
 helm repo update
 helm install fleetdm fleetdm/fleetdm
 ```
