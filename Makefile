@@ -13,8 +13,6 @@ CERT_MANAGER_VERSION := v1.17.1
 cluster:
 	@echo "==> Creating Kind cluster '$(CLUSTER_NAME)'..."
 	kind create cluster --name $(CLUSTER_NAME) --config $(KIND_CONFIG)
-	@echo "==> Removing control-plane taint (single-node cluster)..."
-	kubectl taint nodes --all node-role.kubernetes.io/control-plane- 2>/dev/null || true
 	@echo "==> Installing nginx ingress controller..."
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 	@echo "==> Installing cert-manager $(CERT_MANAGER_VERSION)..."
