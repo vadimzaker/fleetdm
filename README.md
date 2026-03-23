@@ -179,15 +179,16 @@ helm upgrade --install fleetdm ./charts/fleetdm \
 
 ---
 
-## CI — Helm Chart Releases
+## CI
 
-On every `git tag v*` push, GitHub Actions will:
-1. Lint the chart
-2. Package it as `.tgz`
-3. Attach it to a GitHub Release
-4. Update the Helm repo index on `gh-pages` branch
+On **push to `main`**: chart lint + **chart-releaser** (uploads `.tgz` to GitHub Releases, updates `gh-pages` for the Helm repo index).
 
-Add as Helm repo:
+A new release is created only if the chart changed and **`version`** in `charts/fleetdm/Chart.yaml` was bumped.
+
+Install from a release: download the `.tgz` from **Releases** or pass its URL to `helm install`.
+
+**Helm repo** (requires GitHub Pages + `index.yaml` on `gh-pages`):
+
 ```bash
 helm repo add fleetdm https://vadimzaker.github.io/fleetdm
 helm repo update
